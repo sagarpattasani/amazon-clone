@@ -1,0 +1,18 @@
+.orders-page { padding: 20px 16px; }
+.orders-page h1 { font-size: 28px; font-weight: 400; margin-bottom: 20px; }
+.orders-empty { text-align: center; padding: 60px 20px; }
+.orders-empty h3 { font-size: 20px; margin: 12px 0 8px; }
+.orders-list { display: flex; flex-direction: column; gap: 12px; }
+.order-card { display: block; color: var(--amazon-text); border-radius: var(--radius-md); overflow: hidden; }
+.order-card:hover { text-decoration: none; color: var(--amazon-text); box-shadow: var(--shadow-md); }
+.order-card-header { display: flex; justify-content: space-between; padding: 12px 16px; background: #f0f2f2; font-size: 13px; }
+.order-date { margin-right: 16px; }
+.order-total { font-weight: 600; }
+.order-number { color: var(--amazon-link); }
+.order-card-body { display: flex; gap: 16px; padding: 16px; }
+.order-thumb { width: 80px; height: 80px; object-fit: contain; background: #f7f7f7; border-radius: 4px; }
+.order-card-info { flex: 1; }
+.order-status { font-size: 16px; font-weight: 700; display: block; margin-bottom: 4px; }
+.order-card-info p { font-size: 14px; color: var(--amazon-text-secondary); }
+.order-more { color: var(--amazon-text-light); font-size: 13px; }
+.order-delivery { color: var(--amazon-green); font-weight: 600; margin-top: 4px; }
