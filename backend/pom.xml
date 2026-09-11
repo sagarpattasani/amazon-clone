@@ -51,10 +51,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -68,13 +65,7 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- ═══════════════════════════════════ -->
-        <!-- Kafka                               -->
-        <!-- ═══════════════════════════════════ -->
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-        </dependency>
+
 
         <!-- ═══════════════════════════════════ -->
         <!-- Database                            -->
@@ -161,13 +152,7 @@
             <version>${itextpdf.version}</version>
         </dependency>
 
-        <!-- ═══════════════════════════════════ -->
-        <!-- Elasticsearch                       -->
-        <!-- ═══════════════════════════════════ -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
+
 
         <!-- ═══════════════════════════════════ -->
         <!-- Utilities                           -->
@@ -204,11 +189,7 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+
     </dependencies>
 
     <build>
