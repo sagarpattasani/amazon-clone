@@ -26,7 +26,7 @@ public class GoogleOAuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${spring.security.oauth2.client.registration.google.client-id:}")
+    @Value("${app.google.client-id:}")
     private String googleClientId;
 
     /**

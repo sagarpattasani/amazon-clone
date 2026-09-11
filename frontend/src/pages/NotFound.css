@@ -1,0 +1,98 @@
+/* ═══════════════════════════════════════════════════
+   404 Not Found Page Styles
+   ═══════════════════════════════════════════════════ */
+
+.notfound-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 40px 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.notfound-content {
+  text-align: center;
+  max-width: 520px;
+}
+
+.notfound-icon {
+  margin-bottom: 24px;
+}
+
+.notfound-code {
+  display: block;
+  font-size: 96px;
+  font-weight: 800;
+  letter-spacing: -4px;
+  background: linear-gradient(135deg, var(--amazon-orange), var(--amazon-deal-red));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.notfound-dog {
+  font-size: 40px;
+  line-height: 1;
+  color: var(--amazon-text-secondary);
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.dog-ear { font-size: 20px; color: var(--amazon-orange); }
+.dog-face { letter-spacing: 2px; }
+
+.notfound-content h1 {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--amazon-text);
+}
+
+.notfound-content > p {
+  font-size: 14px;
+  color: var(--amazon-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.notfound-search {
+  display: flex;
+  gap: 0;
+  margin-bottom: 24px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.notfound-search input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 2px solid var(--amazon-orange);
+  border-right: none;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  font-size: 14px;
+  color: var(--amazon-text);
+  outline: none;
+}
+
+.notfound-search input:focus {
+  border-color: var(--amazon-orange);
+  box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.2);
+}
+
+.notfound-search .btn {
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 10px 16px;
+}
+
+.notfound-links {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}

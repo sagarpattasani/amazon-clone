@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FiTag, FiCheck, FiX } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import { addressAPI, orderAPI, cartAPI } from '../services/api';
+import { addressAPI, orderAPI, cartAPI, couponAPI } from '../services/api';
 import useCartStore from '../store/cartStore';
 import './Checkout.css';
 
@@ -10,6 +11,9 @@ export default function Checkout() {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('COD');
   const [couponCode, setCouponCode] = useState('');
+  const [couponDiscount, setCouponDiscount] = useState(0);
+  const [couponApplied, setCouponApplied] = useState(null);
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showNewAddress, setShowNewAddress] = useState(false);
@@ -39,12 +43,41 @@ export default function Checkout() {
     } catch (err) { toast.error(err.response?.data?.message || 'Failed'); }
   };
 
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) { toast.error('Enter a coupon code'); return; }
+    setApplyingCoupon(true);
+    try {
+      const res = await couponAPI.validate(couponCode, subtotal);
+      if (res.data.success && res.data.data) {
+        setCouponDiscount(res.data.data.discount);
+        setCouponApplied(res.data.data);
+        toast.success(`Coupon applied! You save ₹${res.data.data.discount}`);
+      } else {
+        toast.error(res.data.message || 'Invalid coupon');
+        setCouponDiscount(0);
+        setCouponApplied(null);
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Invalid coupon code');
+      setCouponDiscount(0);
+      setCouponApplied(null);
+    }
+    setApplyingCoupon(false);
+  };
+
+  const handleRemoveCoupon = () => {
+    setCouponCode('');
+    setCouponDiscount(0);
+    setCouponApplied(null);
+    toast.success('Coupon removed');
+  };
+
   const handlePlaceOrder = async () => {
     if (!selectedAddress) { toast.error('Select a delivery address'); return; }
     setLoading(true);
     try {
       const res = await orderAPI.checkout({
-        addressId: selectedAddress, paymentMethod, couponCode: couponCode || null, paymentMethodType: paymentMethod === 'COD' ? 'COD' : 'CARD'
+        addressId: selectedAddress, paymentMethod, couponCode: couponApplied?.code || null, paymentMethodType: paymentMethod === 'COD' ? 'COD' : 'CARD'
       });
       toast.success('Order placed successfully! 🎉');
       clearCart();
@@ -56,8 +89,8 @@ export default function Checkout() {
   const items = cart?.items || [];
   const subtotal = cart?.subtotal || 0;
   const shipping = subtotal >= 499 ? 0 : 40;
-  const tax = Math.round(subtotal * 0.18);
-  const total = subtotal + shipping + tax;
+  const tax = Math.round((subtotal - couponDiscount) * 0.18);
+  const total = subtotal + shipping + tax - couponDiscount;
 
   return (
     <div className="checkout-page container">
@@ -115,9 +148,43 @@ export default function Checkout() {
           {/* Coupon */}
           <div className="card checkout-section">
             <h2>3. Coupon Code</h2>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <input placeholder="Enter coupon code" value={couponCode} onChange={e => setCouponCode(e.target.value)} style={{ flex: 1, padding: 8, border: '1px solid #ddd', borderRadius: 4 }} />
-              <button className="btn btn-secondary">Apply</button>
+            {couponApplied ? (
+              <div className="coupon-applied">
+                <div className="coupon-applied-info">
+                  <FiTag size={18} />
+                  <div>
+                    <strong>{couponApplied.code}</strong>
+                    <p>{couponApplied.description}</p>
+                    <span className="coupon-savings">You save ₹{couponDiscount.toLocaleString()}</span>
+                  </div>
+                </div>
+                <button className="coupon-remove-btn" onClick={handleRemoveCoupon}><FiX size={16} /> Remove</button>
+              </div>
+            ) : (
+              <div className="coupon-input-row">
+                <div className="coupon-input-wrap">
+                  <FiTag size={16} className="coupon-icon" />
+                  <input
+                    placeholder="Enter coupon code"
+                    value={couponCode}
+                    onChange={e => setCouponCode(e.target.value.toUpperCase())}
+                    onKeyDown={e => e.key === 'Enter' && handleApplyCoupon()}
+                  />
+                </div>
+                <button className="btn btn-secondary" onClick={handleApplyCoupon} disabled={applyingCoupon}>
+                  {applyingCoupon ? 'Validating...' : 'Apply'}
+                </button>
+              </div>
+            )}
+            <div className="coupon-suggestions">
+              <p className="coupon-suggestions-label">Available coupons:</p>
+              <div className="coupon-chips">
+                {['SAVE10', 'FLAT500', 'NEWUSER', 'FREEDOM25'].map(code => (
+                  <button key={code} className="coupon-chip" onClick={() => { setCouponCode(code); }}>
+                    {code}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -145,6 +212,9 @@ export default function Checkout() {
             <div className="divider" />
             <h3 style={{ fontSize: 18, marginBottom: 12 }}>Order Summary</h3>
             <div className="summary-row"><span>Items:</span><span>₹{subtotal.toLocaleString()}</span></div>
+            {couponDiscount > 0 && (
+              <div className="summary-row summary-discount"><span>Coupon ({couponApplied?.code}):</span><span>-₹{couponDiscount.toLocaleString()}</span></div>
+            )}
             <div className="summary-row"><span>Delivery:</span><span>{shipping === 0 ? 'FREE' : `₹${shipping}`}</span></div>
             <div className="summary-row"><span>Tax (GST 18%):</span><span>₹{tax.toLocaleString()}</span></div>
             <div className="divider" />

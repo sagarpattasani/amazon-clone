@@ -1,0 +1,100 @@
+/* ═══════════════════════════════════
+   Countdown Timer — Premium Flip-Clock
+   ═══════════════════════════════════ */
+
+.countdown-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.countdown-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--amazon-deal-red);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.countdown-digits {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.countdown-num {
+  background: linear-gradient(180deg, #1a1a2e 0%, #131921 100%);
+  color: #ff9900;
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 8px;
+  border-radius: 6px;
+  min-width: 40px;
+  text-align: center;
+  line-height: 1.2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.countdown-num::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.countdown-seconds {
+  animation: countdownPulse 1s ease-in-out infinite;
+}
+
+@keyframes countdownPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.countdown-text {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--amazon-text-secondary);
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.countdown-sep {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--amazon-deal-red);
+  line-height: 1;
+  padding-bottom: 14px;
+  animation: colonBlink 1s step-end infinite;
+}
+
+@keyframes colonBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.countdown-expired {
+  color: var(--amazon-deal-red);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* Dark mode */
+[data-theme="dark"] .countdown-num {
+  background: linear-gradient(180deg, #2a2a3e 0%, #1a1a2e 100%);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}

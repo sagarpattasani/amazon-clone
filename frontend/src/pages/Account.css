@@ -1,0 +1,119 @@
+/* ═══════════════════════════════════════════════════
+   Account Page Styles
+   ═══════════════════════════════════════════════════ */
+
+.account-page {
+  padding: 24px 16px;
+  max-width: 960px;
+  animation: fadeInUp 0.4s ease;
+}
+
+.account-page h1 {
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+
+/* ── User Profile Banner ── */
+.account-profile-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.account-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--amazon-dark), var(--amazon-dark-lighter));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  flex-shrink: 0;
+  letter-spacing: 1px;
+}
+
+.account-user-details h2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.account-user-details p {
+  font-size: 14px;
+  color: var(--amazon-text-secondary);
+}
+
+.account-user-details .account-phone {
+  font-size: 13px;
+  color: var(--amazon-text-secondary);
+}
+
+/* ── Menu Grid ── */
+.account-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.account-menu-card {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  color: var(--amazon-text);
+  text-decoration: none;
+  transition: box-shadow var(--transition-smooth), transform var(--transition-smooth);
+  animation: fadeInUp 0.35s ease both;
+}
+
+.account-menu-card:nth-child(2) { animation-delay: 0.05s; }
+.account-menu-card:nth-child(3) { animation-delay: 0.1s; }
+.account-menu-card:nth-child(4) { animation-delay: 0.15s; }
+
+.account-menu-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: var(--amazon-text);
+}
+
+.account-menu-icon {
+  color: var(--amazon-blue);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.account-menu-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.account-menu-card p {
+  font-size: 13px;
+  color: var(--amazon-text-secondary);
+}
+
+/* ── Sign Out Button ── */
+.account-signout {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .account-menu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .account-profile-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+}

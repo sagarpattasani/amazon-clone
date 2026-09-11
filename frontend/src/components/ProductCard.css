@@ -1,18 +1,26 @@
+/* ═══════════════════════════════════
+   Product Card — Premium Styles
+   ═══════════════════════════════════ */
+
 .product-card {
   display: flex;
   flex-direction: column;
   background: white;
   border-radius: var(--radius-md);
   overflow: hidden;
-  transition: box-shadow 0.2s ease;
-  position: relative;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-smooth);
   color: var(--amazon-text);
   text-decoration: none;
+  position: relative;
+  border: 1px solid transparent;
 }
 .product-card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-4px);
   text-decoration: none;
   color: var(--amazon-text);
+  border-color: rgba(0,0,0,0.08);
 }
 
 .product-card-badge {
@@ -20,20 +28,28 @@
   top: 10px;
   left: 10px;
   z-index: 2;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 3px;
 }
 .product-card-featured {
   position: absolute;
   top: 10px;
   right: 10px;
   z-index: 2;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 3px;
 }
 
 .product-card-img {
-  aspect-ratio: 1;
+  height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
   background: #f7f7f7;
   overflow: hidden;
 }
@@ -41,10 +57,10 @@
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s ease;
 }
 .product-card:hover .product-card-img img {
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
 .product-card-info {
@@ -52,16 +68,21 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
 }
 
 .product-card-title {
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  color: var(--amazon-text);
+}
+.product-card:hover .product-card-title {
+  color: var(--amazon-orange-dark);
 }
 
 .product-card-brand {
@@ -72,12 +93,15 @@
 .product-card-rating {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  font-size: 13px;
 }
-.product-card-rating .stars { font-size: 14px; }
+.product-card-rating .stars {
+  font-size: 14px;
+}
 .rating-count {
-  font-size: 12px;
   color: var(--amazon-link);
+  font-size: 12px;
 }
 
 .product-card-price {
@@ -88,21 +112,73 @@
 }
 .product-card-price .price-current {
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
-.product-card-price .symbol {
+.product-card-price .price-mrp {
   font-size: 13px;
-  vertical-align: top;
 }
 
 .product-card-delivery {
   font-size: 12px;
-  color: var(--amazon-text-secondary);
+  color: var(--amazon-green);
+  font-weight: 500;
   margin-top: 2px;
 }
-
 .product-card-oos {
   font-size: 12px;
   color: var(--amazon-red);
-  font-weight: 600;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* Compare Button */
+.product-card-compare {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid var(--amazon-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--amazon-text-secondary);
+  opacity: 0;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+.product-card:hover .product-card-compare { opacity: 1; }
+.product-card-compare.active {
+  opacity: 1;
+  background: var(--amazon-orange);
+  color: white;
+  border-color: var(--amazon-orange);
+}
+.product-card-compare:hover {
+  transform: scale(1.1);
+}
+
+/* ═══ Mobile Product Card ═══ */
+@media (max-width: 768px) {
+  .product-card-img { height: 160px; padding: 10px; }
+  .product-card-info { padding: 10px 10px 12px; }
+  .product-card-title { font-size: 13px; }
+  .product-card-price .price-current { font-size: 18px; }
+  .product-card-price .price-mrp { font-size: 12px; }
+  .product-card-rating .stars { font-size: 12px; }
+  .rating-count { font-size: 11px; }
+  .product-card-delivery { font-size: 11px; }
+  .product-card-compare { opacity: 1; width: 28px; height: 28px; }
+  .product-card-badge { font-size: 10px; padding: 2px 6px; }
+}
+@media (max-width: 480px) {
+  .product-card-img { height: 140px; }
+  .product-card-title { font-size: 12px; -webkit-line-clamp: 2; }
+  .product-card-price .price-current { font-size: 16px; }
+  .product-card-brand { font-size: 11px; }
 }

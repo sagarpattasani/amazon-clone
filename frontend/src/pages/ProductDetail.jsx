@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
-import { FiStar, FiHeart, FiShoppingCart, FiCheck, FiTruck, FiShield, FiRotateCcw } from 'react-icons/fi';
+import { FiStar, FiHeart, FiShoppingCart, FiCheck, FiTruck, FiShield, FiRotateCcw, FiZoomIn } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { productAPI, wishlistAPI } from '../services/api';
 import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
+import useRecentlyViewed from '../hooks/useRecentlyViewed';
 import ProductCard from '../components/ProductCard';
+import Breadcrumb from '../components/Breadcrumb';
 import './ProductDetail.css';
 
 export default function ProductDetail() {
@@ -19,10 +21,25 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [inWishlist, setInWishlist] = useState(false);
   const { addToCart } = useCartStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
+  const { recentProducts } = useRecentlyViewed(id);
+
+  // Image zoom state
+  const [zoomActive, setZoomActive] = useState(false);
+  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
+  const imgContainerRef = useRef(null);
+
+  // Review form state
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewHover, setReviewHover] = useState(0);
+  const [reviewTitle, setReviewTitle] = useState('');
+  const [reviewBody, setReviewBody] = useState('');
+  const [submittingReview, setSubmittingReview] = useState(false);
 
   useEffect(() => {
     setLoading(true);
+    setSelectedImage(0);
     productAPI.getProduct(id).then(res => {
       const data = res.data.data;
       setProduct(data);
@@ -48,6 +65,31 @@ export default function ProductDetail() {
     } catch (err) { toast.error(err.response?.data?.message || 'Failed'); }
   };
 
+  // Image zoom handlers
+  const handleMouseMove = (e) => {
+    if (!imgContainerRef.current) return;
+    const rect = imgContainerRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setZoomPos({ x, y });
+  };
+
+  // Review submission
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    if (reviewRating === 0) { toast.error('Please select a rating'); return; }
+    setSubmittingReview(true);
+    try {
+      await productAPI.addReview(id, { rating: reviewRating, reviewTitle, reviewBody });
+      toast.success('Review submitted! 🎉');
+      setShowReviewForm(false);
+      setReviewRating(0); setReviewTitle(''); setReviewBody('');
+      // Refresh reviews
+      productAPI.getReviews(id).then(res => setReviews(res.data.data?.content || [])).catch(() => {});
+    } catch (err) { toast.error(err.response?.data?.message || 'Failed to submit review'); }
+    setSubmittingReview(false);
+  };
+
   const renderStars = (rating) => {
     const stars = [];
     const full = Math.floor(rating || 0);
@@ -66,8 +108,12 @@ export default function ProductDetail() {
 
   return (
     <div className="product-detail container">
+      <Breadcrumb items={[
+        { label: product.brand || 'Products', path: `/products${product.brand ? `?brand=${product.brand}` : ''}` },
+        { label: product.title?.slice(0, 60) + (product.title?.length > 60 ? '...' : '') },
+      ]} />
       <div className="pd-layout">
-        {/* Image Gallery */}
+        {/* Image Gallery with Zoom */}
         <div className="pd-gallery">
           <div className="pd-thumbs">
             {images.map((img, i) => (
@@ -77,11 +123,22 @@ export default function ProductDetail() {
               </div>
             ))}
           </div>
-          <div className="pd-main-image">
-            <img src={currentImage} alt={product.title} />
-            <button className={`pd-wishlist-btn ${inWishlist ? 'active' : ''}`} onClick={toggleWishlist}>
+          <div
+            className={`pd-main-image ${zoomActive ? 'zooming' : ''}`}
+            ref={imgContainerRef}
+            onMouseEnter={() => setZoomActive(true)}
+            onMouseLeave={() => setZoomActive(false)}
+            onMouseMove={handleMouseMove}
+          >
+            <img
+              src={currentImage}
+              alt={product.title}
+              style={zoomActive ? { transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`, transform: 'scale(2.2)' } : {}}
+            />
+            <button className={`pd-wishlist-btn ${inWishlist ? 'active' : ''}`} onClick={(e) => { e.stopPropagation(); toggleWishlist(); }}>
               <FiHeart size={22} fill={inWishlist ? '#cc0c39' : 'none'} color={inWishlist ? '#cc0c39' : '#555'} />
             </button>
+            {!zoomActive && <span className="pd-zoom-hint"><FiZoomIn size={14} /> Hover to zoom</span>}
           </div>
         </div>
 
@@ -189,7 +246,57 @@ export default function ProductDetail() {
 
       {/* Reviews Section */}
       <section className="pd-reviews" id="reviews">
-        <h2>Customer Reviews</h2>
+        <div className="reviews-header">
+          <h2>Customer Reviews</h2>
+          {isAuthenticated && (
+            <button className="btn btn-secondary btn-sm" onClick={() => setShowReviewForm(!showReviewForm)}>
+              {showReviewForm ? 'Cancel' : 'Write a Review'}
+            </button>
+          )}
+        </div>
+
+        {/* Review Form */}
+        {showReviewForm && (
+          <form className="review-form card" onSubmit={handleSubmitReview}>
+            <h3>Write your review</h3>
+
+            <div className="review-star-picker">
+              <label>Overall rating</label>
+              <div className="star-picker">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    className={`star-pick ${star <= (reviewHover || reviewRating) ? 'active' : ''}`}
+                    onClick={() => setReviewRating(star)}
+                    onMouseEnter={() => setReviewHover(star)}
+                    onMouseLeave={() => setReviewHover(0)}
+                  >
+                    <FaStar size={28} />
+                  </button>
+                ))}
+                <span className="star-label">
+                  {reviewRating === 1 ? 'Poor' : reviewRating === 2 ? 'Fair' : reviewRating === 3 ? 'Good' : reviewRating === 4 ? 'Very Good' : reviewRating === 5 ? 'Excellent' : 'Select'}
+                </span>
+              </div>
+            </div>
+
+            <div className="input-group">
+              <label>Review title</label>
+              <input placeholder="What's most important to know?" value={reviewTitle} onChange={(e) => setReviewTitle(e.target.value)} required />
+            </div>
+
+            <div className="input-group">
+              <label>Your review</label>
+              <textarea placeholder="What did you like or dislike? What did you use this product for?" value={reviewBody} onChange={(e) => setReviewBody(e.target.value)} rows={4} required />
+            </div>
+
+            <button type="submit" className="btn btn-primary" disabled={submittingReview}>
+              {submittingReview ? 'Submitting...' : 'Submit Review'}
+            </button>
+          </form>
+        )}
+
         <div className="reviews-summary">
           <div className="reviews-avg">
             <span className="avg-num">{product.avgRating?.toFixed(1)}</span>
@@ -216,6 +323,20 @@ export default function ProductDetail() {
           <p style={{ color: '#555', padding: 20 }}>No reviews yet. Be the first to review!</p>
         )}
       </section>
+
+      {/* Recently Viewed */}
+      {recentProducts.length > 0 && (
+        <section className="pd-similar pd-recently-viewed">
+          <h2>Your Recently Viewed Items</h2>
+          <div className="scroll-row">
+            {recentProducts.map(p => (
+              <div key={p.id} className="scroll-item">
+                <ProductCard product={p} />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Similar Products */}
       {similar.length > 0 && (

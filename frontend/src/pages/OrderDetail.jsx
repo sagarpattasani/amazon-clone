@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { FiCheckCircle, FiTruck, FiPackage, FiAlertCircle } from 'react-icons/fi';
+import { FiCheckCircle, FiTruck, FiPackage, FiAlertCircle, FiRotateCcw, FiClock } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { orderAPI } from '../services/api';
+import './OrderDetail.css';
 
 export default function OrderDetail() {
   const { id } = useParams();
@@ -29,48 +30,69 @@ export default function OrderDetail() {
   const statusSteps = ['PENDING','CONFIRMED','PROCESSING','SHIPPED','OUT_FOR_DELIVERY','DELIVERED'];
   const currentStep = statusSteps.indexOf(order.status);
 
+  // Generate estimated dates for timeline
+  const orderDate = new Date(order.createdAt || Date.now());
+  const getEstDate = (daysAfter) => {
+    const d = new Date(orderDate);
+    d.setDate(d.getDate() + daysAfter);
+    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+  };
+  const stepDates = [getEstDate(0), getEstDate(0), getEstDate(1), getEstDate(2), getEstDate(4), getEstDate(5)];
+
   return (
-    <div className="container" style={{ padding: '20px 16px' }}>
-      <h1 style={{ fontSize: 28, fontWeight: 400, marginBottom: 20 }}>Order Details</h1>
+    <div className="order-detail-page container">
+      <h1>Order Details</h1>
       <div className="card" style={{ marginBottom: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
           <div>
             <p style={{ fontSize: 13, color: '#555' }}>Order #{order.orderNumber}</p>
             <p style={{ fontSize: 13, color: '#555' }}>Placed {new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
           </div>
-          {canCancel && <button className="btn btn-danger btn-sm" onClick={handleCancel}>Cancel Order</button>}
+          <div style={{ display: 'flex', gap: 8 }}>
+            {canCancel && <button className="btn btn-danger btn-sm" onClick={handleCancel}>Cancel Order</button>}
+            {order.status === 'DELIVERED' && (
+              <Link to={`/account/orders/${id}/return`} className="btn btn-secondary btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <FiRotateCcw size={14} /> Return Items
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Order Status Timeline */}
+      {/* Order Status Timeline — Enhanced */}
       {order.status !== 'CANCELLED' && (
         <div className="card" style={{ marginBottom: 16 }}>
           <h3 style={{ marginBottom: 20 }}>Order Status</h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 0, overflowX: 'auto' }}>
-            {statusSteps.map((step, i) => (
-              <div key={step} style={{ flex: 1, textAlign: 'center', minWidth: 100 }}>
-                <div style={{ width: 32, height: 32, borderRadius: '50%', margin: '0 auto 8px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: i <= currentStep ? '#067d62' : '#ddd', color: 'white' }}>
-                  {i <= currentStep ? <FiCheckCircle size={18} /> : <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'white' }} />}
+          <div className="od-timeline">
+            {statusSteps.map((step, i) => {
+              const isCompleted = i < currentStep;
+              const isCurrent = i === currentStep;
+              return (
+                <div key={step} className="od-timeline-step">
+                  {i < statusSteps.length - 1 && (
+                    <div className={`od-timeline-line ${isCompleted || isCurrent ? 'completed' : 'pending'}`} />
+                  )}
+                  <div className={`od-timeline-dot ${isCompleted ? 'completed' : isCurrent ? 'current' : 'pending'}`}>
+                    {isCompleted ? <FiCheckCircle size={18} /> : isCurrent ? <FiClock size={18} /> : <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'white', display: 'block' }} />}
+                  </div>
+                  <p className={`od-timeline-label ${isCompleted ? 'completed' : isCurrent ? 'current' : 'pending'}`}>
+                    {step.replace(/_/g, ' ')}
+                  </p>
+                  <p className="od-timeline-date">{stepDates[i]}</p>
                 </div>
-                <p style={{ fontSize: 11, color: i <= currentStep ? '#067d62' : '#999', fontWeight: i === currentStep ? 700 : 400 }}>
-                  {step.replace(/_/g, ' ')}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
 
       {order.status === 'CANCELLED' && (
-        <div className="card" style={{ marginBottom: 16, borderLeft: '4px solid #d9534f' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#d9534f' }}>
-            <FiAlertCircle size={20} /> <strong>Order Cancelled</strong>
-          </div>
+        <div className="card od-cancelled" style={{ marginBottom: 16 }}>
+          <FiAlertCircle size={20} /> <strong>Order Cancelled</strong>
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 16, alignItems: 'start' }}>
+      <div className="od-grid">
         {/* Items */}
         <div className="card">
           <h3 style={{ marginBottom: 12 }}>Order Items</h3>

@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom';
 import { FiStar, FiHeart } from 'react-icons/fi';
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
+import { TbArrowsShuffle } from 'react-icons/tb';
+import useComparisonStore from '../store/comparisonStore';
 import './ProductCard.css';
 
 export default function ProductCard({ product }) {
   const { id, title, brand, price, mrp, discountPercent, avgRating, totalRatings, primaryImage, isFeatured, inStock } = product;
+  const { addItem, removeItem, isInComparison, items } = useComparisonStore();
+  const inCompare = isInComparison(id);
 
   const renderStars = (rating) => {
     const stars = [];
@@ -16,12 +20,30 @@ export default function ProductCard({ product }) {
     return stars;
   };
 
+  const handleCompare = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (inCompare) removeItem(id);
+    else {
+      if (items.length >= 4) return;
+      addItem(product);
+    }
+  };
+
   return (
     <Link to={`/products/${id}`} className="product-card">
       {discountPercent > 0 && (
         <span className="product-card-badge badge-deal">{discountPercent}% off</span>
       )}
       {isFeatured && <span className="product-card-featured badge-featured">Featured</span>}
+
+      <button
+        className={`product-card-compare ${inCompare ? 'active' : ''}`}
+        onClick={handleCompare}
+        title={inCompare ? 'Remove from comparison' : 'Add to comparison'}
+      >
+        <TbArrowsShuffle size={16} />
+      </button>
 
       <div className="product-card-img">
         <img

@@ -1,4 +1,6 @@
-.footer { background: var(--amazon-dark); }
+/* ═══════════════════════════════════
+   Footer — Amazon-Style Premium
+   ═══════════════════════════════════ */
 
 .footer-back-to-top {
   display: block;
@@ -7,15 +9,21 @@
   background: var(--amazon-dark-lighter);
   color: white;
   font-size: 13px;
+  font-weight: 500;
+  text-align: center;
   border: none;
   cursor: pointer;
+  transition: background var(--transition-fast);
 }
-.footer-back-to-top:hover { background: #485769; }
+.footer-back-to-top:hover {
+  background: #485769;
+}
 
 .footer-links {
-  padding: 40px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  background: var(--amazon-dark-light);
+  padding: 40px 0 32px;
 }
+
 .footer-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -25,31 +33,46 @@
   color: white;
   font-size: 16px;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 .footer-col a {
   display: block;
   color: #ddd;
   font-size: 13px;
-  padding: 4px 0;
+  padding: 3px 0;
+  transition: color var(--transition-fast), padding-left var(--transition-fast);
 }
-.footer-col a:hover { color: white; text-decoration: none; }
+.footer-col a:hover {
+  color: white;
+  text-decoration: underline;
+  padding-left: 2px;
+}
 
 .footer-bottom {
-  padding: 24px;
+  background: var(--amazon-dark);
+  padding: 24px 0;
   text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
-.footer-bottom .footer-logo {
-  display: inline-flex;
+.footer-logo {
+  display: flex;
   align-items: baseline;
+  justify-content: center;
+  gap: 0;
   margin-bottom: 8px;
 }
-.footer-bottom .logo-text { font-size: 20px; font-weight: 800; color: white; }
-.footer-bottom .logo-suffix { font-size: 12px; color: var(--amazon-orange); font-weight: 600; }
-.footer-copyright { color: #999; font-size: 12px; }
+.footer-logo .logo-text { font-size: 20px; }
+.footer-logo .logo-suffix { font-size: 12px; }
+.footer-copyright {
+  color: #999;
+  font-size: 12px;
+}
 
 @media (max-width: 768px) {
   .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .footer-links { padding: 24px 0 20px; }
+  .footer-col h4 { font-size: 14px; margin-bottom: 10px; }
+  .footer { padding-bottom: var(--mobile-nav-height); }
 }
 @media (max-width: 480px) {
   .footer-grid { grid-template-columns: 1fr; }

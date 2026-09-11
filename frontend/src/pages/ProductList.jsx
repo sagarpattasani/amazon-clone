@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { productAPI } from '../services/api';
 import ProductCard from '../components/ProductCard';
+import Breadcrumb from '../components/Breadcrumb';
 import './ProductList.css';
 
 export default function ProductList() {
@@ -101,6 +102,12 @@ export default function ProductList() {
 
       {/* Product Grid */}
       <div className="products-main">
+        <Breadcrumb items={[
+          q ? { label: `Search: "${q}"` } :
+          category ? { label: 'Products', path: '/products' } :
+          { label: 'All Products' },
+          ...(category ? [{ label: `Category ${category}` }] : []),
+        ]} />
         <div className="results-header">
           <p>{q ? `Results for "${q}"` : 'All Products'} — <strong>{totalElements}</strong> results</p>
         </div>

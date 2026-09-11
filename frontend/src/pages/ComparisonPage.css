@@ -1,0 +1,43 @@
+/* ═══════════════════════════════════════════════════
+   Product Comparison Page Styles
+   ═══════════════════════════════════════════════════ */
+.compare-page { padding: 24px 16px; animation: fadeInUp 0.4s ease; }
+.compare-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.compare-header h1 { font-size: 28px; font-weight: 400; }
+.compare-empty { text-align: center; padding: 80px 20px; }
+.compare-empty h1 { font-size: 24px; margin-bottom: 12px; }
+.compare-empty p { color: var(--amazon-text-secondary); margin-bottom: 24px; max-width: 400px; margin-left: auto; margin-right: auto; }
+.compare-table-wrapper { overflow-x: auto; }
+.compare-table { width: 100%; border-collapse: collapse; background: white; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); }
+.compare-table th, .compare-table td { padding: 16px; border-bottom: 1px solid var(--amazon-border); text-align: left; vertical-align: top; font-size: 14px; }
+.compare-table th { background: var(--amazon-cart-bg); font-weight: 600; font-size: 13px; color: var(--amazon-text-secondary); white-space: nowrap; width: 140px; }
+.compare-table td { min-width: 220px; }
+.compare-product-cell { position: relative; text-align: center; }
+.compare-remove { position: absolute; top: -8px; right: -8px; width: 28px; height: 28px; border-radius: 50%; background: white; border: 1px solid var(--amazon-border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--amazon-text-secondary); transition: all var(--transition-fast); z-index: 2; }
+.compare-remove:hover { background: var(--amazon-deal-red); color: white; border-color: var(--amazon-deal-red); }
+.compare-img { width: 120px; height: 120px; object-fit: contain; margin: 0 auto 12px; }
+.compare-title { display: block; font-size: 13px; font-weight: 500; color: var(--amazon-text); line-height: 1.4; text-decoration: none; }
+.compare-title:hover { color: var(--amazon-orange-dark); }
+.compare-price { font-size: 20px; font-weight: 700; color: var(--amazon-text); }
+.compare-mrp { margin-left: 8px; font-size: 13px; color: var(--amazon-text-secondary); text-decoration: line-through; }
+.compare-discount { font-size: 16px; font-weight: 600; color: var(--amazon-deal-red); }
+.compare-na { color: var(--amazon-text-light); }
+.compare-rating { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 500; }
+.compare-rating-count { font-size: 12px; color: var(--amazon-text-secondary); font-weight: 400; }
+.compare-instock { color: var(--amazon-green); font-weight: 500; }
+.compare-oos { color: var(--amazon-red); font-weight: 500; }
+.compare-desc { font-size: 13px; color: var(--amazon-text-secondary); line-height: 1.5; max-width: 250px; }
+
+/* Floating Compare Bar */
+.compare-float-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--amazon-dark); color: white; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 999; box-shadow: 0 -4px 20px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.compare-float-items { display: flex; align-items: center; gap: 12px; }
+.compare-float-item { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: var(--radius-pill); font-size: 12px; }
+.compare-float-item img { width: 28px; height: 28px; object-fit: contain; border-radius: 4px; background: white; }
+.compare-float-item button { background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; padding: 0 4px; }
+.compare-float-item button:hover { color: white; }
+.compare-float-actions { display: flex; gap: 8px; }
+@media (max-width: 768px) {
+  .compare-float-bar { flex-direction: column; gap: 8px; }
+  .compare-float-items { flex-wrap: wrap; }
+}

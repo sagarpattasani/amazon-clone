@@ -2,14 +2,65 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Amazon Clone - Online Shopping for Electronics, Apparel, Computers, Books, DVDs & more. Huge selection, great prices, fast delivery." />
-    <meta name="theme-color" content="#131921" />
-    <title>Amazon Clone - Online Shopping</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- SEO -->
+    <title>Amazon Clone — Online Shopping for Electronics, Fashion, Home & More</title>
+    <meta name="description" content="Shop millions of products at great prices. Electronics, Fashion, Home & Kitchen, Books, Beauty & more. FREE delivery, easy returns, secure payments." />
+    <meta name="keywords" content="online shopping, electronics, fashion, books, home kitchen, deals, amazon clone" />
+    <meta name="author" content="Sagar Pattasani" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://amazon-clone.app" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Amazon Clone — Online Shopping" />
+    <meta property="og:description" content="Shop millions of products at great prices. Electronics, Fashion, Home & Kitchen, Books & more." />
+    <meta property="og:url" content="https://amazon-clone.app" />
+    <meta property="og:site_name" content="Amazon Clone" />
+    <meta property="og:image" content="/icons/og-image.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Amazon Clone — Online Shopping" />
+    <meta name="twitter:description" content="Shop millions of products at great prices." />
+
+    <!-- PWA -->
+    <meta name="theme-color" content="#131921" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1111" media="(prefers-color-scheme: dark)" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Amazon Clone" />
+    <meta name="application-name" content="Amazon Clone" />
+    <meta name="msapplication-TileColor" content="#131921" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192.png" />
+
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://placehold.co" />
+
+    <!-- Prevent telephone number detection on iOS -->
+    <meta name="format-detection" content="telephone=no" />
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="padding: 40px; text-align: center; font-family: Arial, sans-serif;">
+        <h1>JavaScript Required</h1>
+        <p>Please enable JavaScript to use Amazon Clone.</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -1,8 +1,42 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { productAPI, categoryAPI } from '../services/api';
+import useRecentlyViewed from '../hooks/useRecentlyViewed';
 import ProductCard from '../components/ProductCard';
+import CountdownTimer from '../components/CountdownTimer';
 import './Home.css';
+
+const heroSlides = [
+  {
+    title: 'Great Freedom Festival',
+    subtitle: 'Incredible deals on top brands — Up to 70% off',
+    cta: 'Shop the Deals',
+    link: '/products?sort=discount',
+    gradient: 'linear-gradient(135deg, #131921 0%, #232f3e 40%, #37475a 70%, #f08804 100%)',
+  },
+  {
+    title: 'Electronics Mega Sale',
+    subtitle: 'Latest smartphones, laptops & accessories at best prices',
+    cta: 'Explore Electronics',
+    link: '/products?category=1',
+    gradient: 'linear-gradient(135deg, #0a1628 0%, #1b3a5c 40%, #1b7acd 80%, #56b5c4 100%)',
+  },
+  {
+    title: 'Fashion Fiesta',
+    subtitle: 'Trending styles from Nike, Levi\'s, Raymond & more',
+    cta: 'Shop Fashion',
+    link: '/products?category=2',
+    gradient: 'linear-gradient(135deg, #1a0a1e 0%, #4a1942 40%, #cc0c39 80%, #ff6b6b 100%)',
+  },
+  {
+    title: 'Home & Kitchen Deals',
+    subtitle: 'Transform your space — Starting at ₹199',
+    cta: 'Shop Now',
+    link: '/products?category=3',
+    gradient: 'linear-gradient(135deg, #0a1e0a 0%, #067d62 40%, #0f9b58 80%, #34d399 100%)',
+  },
+];
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
@@ -10,6 +44,28 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const { recentProducts } = useRecentlyViewed(null);
+  const slideTimer = useRef(null);
+
+  const goToSlide = useCallback((index) => {
+    setCurrentSlide((index + heroSlides.length) % heroSlides.length);
+  }, []);
+
+  const nextSlide = useCallback(() => goToSlide(currentSlide + 1), [currentSlide, goToSlide]);
+  const prevSlide = useCallback(() => goToSlide(currentSlide - 1), [currentSlide, goToSlide]);
+
+  // Auto-rotate hero
+  useEffect(() => {
+    slideTimer.current = setInterval(nextSlide, 5000);
+    return () => clearInterval(slideTimer.current);
+  }, [nextSlide]);
+
+  // Pause on hover
+  const pauseSlider = () => clearInterval(slideTimer.current);
+  const resumeSlider = () => {
+    slideTimer.current = setInterval(nextSlide, 5000);
+  };
 
   useEffect(() => {
     Promise.allSettled([
@@ -30,17 +86,46 @@ export default function Home() {
 
   return (
     <div className="home">
-      {/* ── Hero Banner ── */}
-      <div className="hero-banner">
-        <div className="hero-content">
-          <h1>Great Freedom Festival</h1>
-          <p>Incredible deals on top brands</p>
-          <Link to="/products?sort=discount" className="btn btn-primary btn-lg">Shop the Deals</Link>
+      {/* ── Hero Carousel ── */}
+      <div
+        className="hero-carousel"
+        onMouseEnter={pauseSlider}
+        onMouseLeave={resumeSlider}
+      >
+        <div
+          className="hero-slides"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        >
+          {heroSlides.map((slide, i) => (
+            <div key={i} className="hero-slide" style={{ background: slide.gradient }}>
+              <div className="hero-content">
+                <h1>{slide.title}</h1>
+                <p>{slide.subtitle}</p>
+                <Link to={slide.link} className="btn btn-primary btn-lg">{slide.cta}</Link>
+              </div>
+              <div className="hero-overlay" />
+            </div>
+          ))}
         </div>
-        <div className="hero-overlay" />
+        <button className="hero-arrow hero-arrow-left" onClick={prevSlide} aria-label="Previous slide">
+          <FiChevronLeft size={32} />
+        </button>
+        <button className="hero-arrow hero-arrow-right" onClick={nextSlide} aria-label="Next slide">
+          <FiChevronRight size={32} />
+        </button>
+        <div className="hero-indicators">
+          {heroSlides.map((_, i) => (
+            <button
+              key={i}
+              className={`hero-dot ${i === currentSlide ? 'active' : ''}`}
+              onClick={() => goToSlide(i)}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* ── Category Cards (overlapping hero) ── */}
+      {/* ── Category Cards ── */}
       <div className="container">
         <div className="category-cards-grid">
           {categories.slice(0, 8).map(cat => (
@@ -55,12 +140,15 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── Deals of the Day ── */}
+      {/* ── Deals of the Day — with Countdown ── */}
       {deals.length > 0 && (
         <section className="home-section">
           <div className="container">
             <div className="section-header">
-              <h2>Today's Deals</h2>
+              <div className="section-header-left">
+                <h2>Today's Deals</h2>
+                <CountdownTimer />
+              </div>
               <Link to="/products?sort=discount">See all deals</Link>
             </div>
             <div className="scroll-row">
@@ -101,6 +189,24 @@ export default function Home() {
             </div>
             <div className="scroll-row">
               {newArrivals.map(product => (
+                <div key={product.id} className="scroll-item">
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Recently Viewed ── */}
+      {recentProducts.length > 0 && (
+        <section className="home-section">
+          <div className="container">
+            <div className="section-header">
+              <h2>Your Recently Viewed Items</h2>
+            </div>
+            <div className="scroll-row">
+              {recentProducts.map(product => (
                 <div key={product.id} className="scroll-item">
                   <ProductCard product={product} />
                 </div>

@@ -1,0 +1,224 @@
+/* ═══════════════════════════════════════════════════
+   Profile Edit (Login & Security) Styles
+   ═══════════════════════════════════════════════════ */
+
+.profile-page {
+  padding: 24px 16px;
+  max-width: 800px;
+  animation: fadeInUp 0.4s ease;
+}
+
+.profile-title {
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+
+/* ── User Card ── */
+.profile-user-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px !important;
+  margin-bottom: 20px;
+}
+
+.profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--amazon-dark), var(--amazon-dark-lighter));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.profile-avatar span {
+  font-size: 26px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 1px;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-user-info h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.profile-user-info p {
+  font-size: 14px;
+  color: var(--amazon-text-secondary);
+  margin-bottom: 6px;
+}
+
+/* ── Settings Rows ── */
+.profile-settings {
+  padding: 0 !important;
+}
+
+.profile-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 24px;
+  transition: background var(--transition-fast);
+}
+
+.profile-row:hover {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.profile-row.editing {
+  background: #fafafa;
+}
+
+.profile-row-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--amazon-cart-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--amazon-text-secondary);
+  margin-top: 2px;
+}
+
+.profile-row-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-row-content > label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--amazon-text);
+  margin-bottom: 4px;
+}
+
+.profile-row-value {
+  font-size: 15px;
+  color: var(--amazon-text-secondary);
+}
+
+.profile-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1px solid var(--amazon-border-dark);
+  border-radius: var(--radius-pill);
+  color: var(--amazon-text);
+  font-size: 13px;
+  padding: 6px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.profile-edit-btn:hover {
+  background: var(--amazon-cart-bg);
+  border-color: var(--amazon-text-secondary);
+}
+
+/* ── Edit Form ── */
+.profile-edit-form {
+  margin-top: 8px;
+}
+
+.profile-edit-form > input {
+  width: 100%;
+  max-width: 350px;
+  padding: 8px 10px;
+  border: 1px solid var(--amazon-border-dark);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--amazon-text);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.profile-edit-form > input:focus {
+  border-color: #e77600;
+  box-shadow: 0 0 0 3px #f0c14b40;
+  outline: none;
+}
+
+.profile-edit-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.profile-password-form {
+  max-width: 350px;
+}
+
+.profile-password-form .input-group {
+  margin-bottom: 12px;
+}
+
+/* ── Divider ── */
+.profile-divider {
+  height: 1px;
+  background: var(--amazon-border);
+  margin: 0 24px;
+}
+
+/* ── Security Tip ── */
+.profile-security-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: var(--radius-md);
+  color: #795548;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.profile-security-tip svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #f0ad4e;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .profile-user-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px !important;
+  }
+
+  .profile-row {
+    flex-wrap: wrap;
+    padding: 16px 20px;
+  }
+
+  .profile-edit-btn {
+    margin-left: auto;
+  }
+
+  .profile-edit-form > input {
+    max-width: 100%;
+  }
+
+  .profile-password-form {
+    max-width: 100%;
+  }
+}

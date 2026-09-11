@@ -1,74 +1,93 @@
 /* ═══════════════════════════════════
-   Auth Pages Shared Styles
+   Auth Pages — Premium Styles
    ═══════════════════════════════════ */
+
 .auth-page {
-  min-height: 80vh;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 50%, #f0f0f0 100%);
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: white;
+  padding: 40px 16px;
 }
+
 .auth-container {
   width: 100%;
   max-width: 380px;
-  padding-top: 20px;
+  animation: fadeInUp 0.5s ease-out;
 }
+
 .auth-logo {
   display: flex;
   align-items: baseline;
   justify-content: center;
   margin-bottom: 20px;
+  text-decoration: none;
 }
-.auth-logo .logo-text { font-size: 30px; font-weight: 800; color: var(--amazon-dark); }
-.auth-logo .logo-suffix { font-size: 16px; color: var(--amazon-orange); font-weight: 600; }
-.auth-logo:hover { text-decoration: none; }
+.auth-logo .logo-text {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--amazon-dark);
+}
+.auth-logo .logo-suffix {
+  font-size: 16px;
+  color: var(--amazon-orange);
+  font-weight: 600;
+}
 
 .auth-card {
-  border: 1px solid var(--amazon-border);
-  border-radius: var(--radius-md);
-  padding: 24px;
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  border: 1px solid #e0e0e0;
 }
+
 .auth-title {
   font-size: 26px;
-  font-weight: 400;
-  margin-bottom: 16px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--amazon-text);
 }
+
 .auth-subtitle {
   font-size: 13px;
   color: var(--amazon-text-secondary);
   margin-bottom: 16px;
+  line-height: 1.5;
 }
+
 .auth-forgot {
   float: right;
   font-size: 12px;
   font-weight: 400;
 }
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e7e7e7;
+}
+.auth-divider span {
+  font-size: 12px;
+  color: var(--amazon-text-secondary);
+  white-space: nowrap;
+}
+
 .auth-legal {
   font-size: 12px;
   color: var(--amazon-text-secondary);
   margin-top: 16px;
   line-height: 1.5;
 }
-.auth-legal a { color: var(--amazon-link); }
-.auth-divider {
-  position: relative;
-  text-align: center;
-  margin: 20px 0 16px;
-}
-.auth-divider::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: 1px;
-  background: var(--amazon-border);
-}
-.auth-divider span {
-  position: relative;
-  background: white;
-  padding: 0 12px;
-  font-size: 12px;
-  color: var(--amazon-text-secondary);
+.auth-legal a {
+  color: var(--amazon-link);
 }

@@ -73,16 +73,23 @@ export default function CartPage() {
           </div>
 
           {savedItems.length > 0 && (
-            <div className="card" style={{ marginTop: 16 }}>
-              <h2 style={{ fontSize: 20, marginBottom: 12 }}>Saved for Later ({savedItems.length} items)</h2>
+            <div className="card saved-section">
+              <div className="saved-section-header">
+                <h2>Saved for Later</h2>
+                <span className="saved-count-badge">{savedItems.length}</span>
+              </div>
               {savedItems.map(item => (
                 <div key={item.id} className="cart-item saved-item">
-                  <div className="cart-item-img">
+                  <Link to={`/products/${item.productId}`} className="cart-item-img">
                     <img src={item.productImage || 'https://via.placeholder.com/100'} alt="" />
-                  </div>
+                  </Link>
                   <div className="cart-item-info">
-                    <p className="cart-item-title">{item.productTitle}</p>
+                    <Link to={`/products/${item.productId}`} className="cart-item-title">{item.productTitle}</Link>
+                    {item.brand && <p className="cart-item-brand">{item.brand}</p>}
                     <span className="price-current" style={{ fontSize: 18 }}>₹{item.price?.toLocaleString()}</span>
+                    {item.mrp > item.price && (
+                      <span className="price-mrp" style={{ marginLeft: 8, fontSize: 13 }}>₹{item.mrp?.toLocaleString()}</span>
+                    )}
                     <div className="cart-item-actions">
                       <button onClick={() => moveToCart(item.id)} className="btn btn-primary btn-sm">Move to Cart</button>
                       <button onClick={() => removeItem(item.id)}><FiTrash2 size={14} /> Delete</button>
